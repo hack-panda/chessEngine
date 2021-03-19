@@ -39,6 +39,8 @@ def main():
 
     # game state object
     gs = chessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False  # flag variable for when a move is made
     loadImages()
 
     run = True
@@ -51,6 +53,7 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 run = False
+            # mouse handlers
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()  # (x,y) location of the mouse
                 col = location[0]//SQ_SIZE
@@ -67,9 +70,20 @@ def main():
                     move = chessEngine.Move(
                         playerClicks[0], playerClicks[1], gs.board)
                     print(move.getChessNotation())
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = ()  # reset user clicks
                     playerClicks = []
+            # key handlers
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z:  # undo when z  is pressed
+                    gs.undoMove()
+                    moveMade = True
+
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
