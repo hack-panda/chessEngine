@@ -74,31 +74,35 @@ class GameState():
 
     def getPawnMoves(self, r, c, moves):
         if self.whiteToMove:  # white pawns
-            if r>=0 and self.board[r-1][c] == "--":  # 1 square pawn advance
-                moves.append(Move((r, c), (r-1, c), self.board))
-                if r == 6 and self.board[r-2][c] == '--':  # 2 square pawn advance
-                    moves.append(Move((r, c), (r-2, c), self.board))
+            if r > 0:
+                if self.board[r-1][c] == "--":  # 1 square pawn advance
+                    moves.append(Move((r, c), (r-1, c), self.board))
+                    # 2 square pawn advance
+                    if r == 6 and self.board[r-2][c] == '--':
+                        moves.append(Move((r, c), (r-2, c), self.board))
 
-            if c-1 >= 0:  # captures to left
-                if self.board[r-1][c-1][0] == 'b':  # enemy piece to capture
-                    moves.append(Move((r, c), (r-1, c-1), self.board))
+                if c-1 >= 0:  # captures to left
+                    if self.board[r-1][c-1][0] == 'b':  # enemy piece to capture
+                        moves.append(Move((r, c), (r-1, c-1), self.board))
 
-            if c+1 <= 7:  # captures to the right
-                if self.board[r-1][c+1][0] == 'b':
-                    moves.append(Move((r, c), (r-1, c+1), self.board))
+                if c+1 <= 7:  # captures to the right
+                    if self.board[r-1][c+1][0] == 'b':
+                        moves.append(Move((r, c), (r-1, c+1), self.board))
         else:  # black pawns
-            if r<=7 and self.board[r+1][c] == "--":  # 1 square pawn advance
-                moves.append(Move((r, c), (r+1, c), self.board))
-                if r == 1 and self.board[r+2][c] == "--":  # 2 square pawn advance
-                    moves.append(Move((r, c), (r+2, c), self.board))
+            if r < 7:
+                if self.board[r+1][c] == "--":  # 1 square pawn advance
+                    moves.append(Move((r, c), (r+1, c), self.board))
+                    # 2 square pawn advance
+                    if r == 1 and self.board[r+2][c] == "--":
+                        moves.append(Move((r, c), (r+2, c), self.board))
 
-            if c-1 >= 0:  # captures to the right
-                if self.board[r+1][c-1][0] == 'w':  # enemy piece to capture
-                    moves.append(Move((r, c), (r+1, c-1), self.board))
+                if c-1 >= 0:  # captures to the right
+                    if self.board[r+1][c-1][0] == 'w':  # enemy piece to capture
+                        moves.append(Move((r, c), (r+1, c-1), self.board))
 
-            if c+1 <= 7:  # captures to the left
-                if self.board[r+1][c+1][0] == 'w':  # enemy piece to capture
-                    moves.append(Move((r, c), (r+1, c+1), self.board))
+                if c+1 <= 7:  # captures to the left
+                    if self.board[r+1][c+1][0] == 'w':  # enemy piece to capture
+                        moves.append(Move((r, c), (r+1, c+1), self.board))
 
     """
     Get all the rook moves for a rook at (row,column)
