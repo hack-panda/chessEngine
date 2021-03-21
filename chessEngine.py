@@ -137,73 +137,26 @@ class GameState():
     """
 
     def getKnightMoves(self, r, c, moves):
-        if self.whiteToMove:  # white knight
-            if r+2 <= 7:
-                if c-1 >= 0:
-                    if self.board[r+2][c-1] == "--" or self.board[r+2][c-1][0] == 'b':
-                        moves.append(Move((r, c), (r+2, c-1), self.board))
-                if c+1 <= 7:
-                    if self.board[r+2][c+1] == "--" or self.board[r+2][c+1][0] == 'b':
-                        moves.append(Move((r, c), (r+2, c+1), self.board))
-            if r-2 >= 0:
-                if c-1 >= 0:
-                    if self.board[r-2][c-1] == "--" or self.board[r-2][c-1][0] == 'b':
-                        moves.append(Move((r, c), (r-2, c-1), self.board))
-                if c+1 <= 7:
-                    if self.board[r-2][c+1] == "--" or self.board[r-2][c+1][0] == 'b':
-                        moves.append(Move((r, c), (r-2, c+1), self.board))
+        # all possible moves of knight
+        knightMoves = ((2, 1), (2, -1), (-2, 1), (-2, -1),
+                       (1, 2), (1, -2), (-1, 2), (-1, -2))
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for d in knightMoves:
+            endRow = r+d[0]
+            endCol = c+d[1]
 
-            if c+2 <= 7:
-                if r-1 >= 0:
-                    if self.board[r-1][c+2] == "--" or self.board[r-1][c+2][0] == 'b':
-                        moves.append(Move((r, c), (r-1, c+2), self.board))
-                if r+1 <= 7:
-                    if self.board[r+1][c+2] == "--" or self.board[r+1][c+2][0] == 'b':
-                        moves.append(Move((r, c), (r+1, c+2), self.board))
-            if c-2 >= 0:
-                if r-1 >= 0:
-                    if self.board[r-1][c-2] == "--" or self.board[r-1][c-2][0] == 'b':
-                        moves.append(Move((r, c), (r-1, c-2), self.board))
-                if r+1 <= 7:
-                    if self.board[r+1][c-2] == "--" or self.board[r+1][c-2][0] == 'b':
-                        moves.append(Move((r, c), (r+1, c-2), self.board))
-        else:  # black knight
-            if r+2 <= 7:
-                if c-1 >= 0:
-                    if self.board[r+2][c-1] == "--" or self.board[r+2][c-1][0] == 'w':
-                        moves.append(Move((r, c), (r+2, c-1), self.board))
-                if c+1 <= 7:
-                    if self.board[r+2][c+1] == "--" or self.board[r+2][c+1][0] == 'w':
-                        moves.append(Move((r, c), (r+2, c+1), self.board))
-            if r-2 >= 0:
-                if c-1 >= 0:
-                    if self.board[r-2][c-1] == "--" or self.board[r-2][c-1][0] == 'w':
-                        moves.append(Move((r, c), (r-2, c-1), self.board))
-                if c+1 <= 7:
-                    if self.board[r-2][c+1] == "--" or self.board[r-2][c+1][0] == 'w':
-                        moves.append(Move((r, c), (r-2, c+1), self.board))
-
-            if c+2 <= 7:
-                if r-1 >= 0:
-                    if self.board[r-1][c+2] == "--" or self.board[r-1][c+2][0] == 'w':
-                        moves.append(Move((r, c), (r-1, c+2), self.board))
-                if r+1 <= 7:
-                    if self.board[r+1][c+2] == "--" or self.board[r+1][c+2][0] == 'w':
-                        moves.append(Move((r, c), (r+1, c+2), self.board))
-            if c-2 >= 0:
-                if r-1 >= 0:
-                    if self.board[r-1][c-2] == "--" or self.board[r-1][c-2][0] == 'w':
-                        moves.append(Move((r, c), (r-1, c-2), self.board))
-                if r+1 <= 7:
-                    if self.board[r+1][c-2] == "--" or self.board[r+1][c-2][0] == 'w':
-                        moves.append(Move((r, c), (r+1, c-2), self.board))
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor:  # empty or enemy piece
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
 
     """
     Get all the Bishop moves for a Bishop at (row,column)
     """
 
     def getBishopMoves(self, r, c, moves):
-        directions = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # upleft upright downleft downright
+        # upleft upright downleft downright
+        directions = ((-1, -1), (-1, 1), (1, -1), (1, 1))
         # another way of writing an if statement
         enemyColor = 'b' if self.whiteToMove else 'w'
 
