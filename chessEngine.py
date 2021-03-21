@@ -101,107 +101,35 @@ class GameState():
             if c+1 <= 7:  # captures to the left
                 if self.board[r+1][c+1][0] == 'w':  # enemy piece to capture
                     moves.append(Move((r, c), (r+1, c+1), self.board))
-                    
-        #add pawn promotions later
+
+        # add pawn promotions later
 
     """
     Get all the rook moves for a rook at (row,column)
     """
 
     def getRookMoves(self, r, c, moves):
-        if self.whiteToMove:  # white to move
-            # move through rows
-            i = 1
-            while True:
-                if r+i <= 7:
-                    if self.board[r+i][c][0] == 'w':
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1))  # up left down right
+        # another way of writing an if statement
+        enemyColor = 'b' if self.whiteToMove else 'w'
+
+        for d in directions:  # iterate through directions
+            for i in range(1, 8):  # add to row or column from 1 to 7
+                endRow = r+d[0]*i  # change rows
+                endCol = c+d[1]*i  # change columns
+
+                if 0 <= endRow < 8 and 0 <= endCol < 8:  # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--":  # empty space valid
+                        moves.append(
+                            Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor:  # enemy piece valid
+                        moves.append(
+                            Move((r, c), (endRow, endCol), self.board))
                         break
-                    moves.append(Move((r, c), (r+i, c), self.board))
-                    if self.board[r+i][c][0] == 'b':
+                    else:  # not an enemy piece
                         break
-                    i += 1
-                else:
-                    break
-            i = 1
-            while True:
-                if r-i >= 0:
-                    if self.board[r-i][c][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r-i, c), self.board))
-                    if self.board[r-i][c][0] == 'b':
-                        break
-                    i += 1
-                else:
-                    break
-            # move through columns
-            i = 1
-            while True:
-                if c+i <= 7:
-                    if self.board[r][c+i][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r, c+i), self.board))
-                    if self.board[r][c+i][0] == 'b':
-                        break
-                    i += 1
-                else:
-                    break
-            i = 1
-            while True:
-                if c-i >= 0:
-                    if self.board[r][c-i][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r, c-i), self.board))
-                    if self.board[r][c-i][0] == 'b':
-                        break
-                    i += 1
-                else:
-                    break
-        else:  # black to move
-            # move through rows
-            i = 1
-            while True:
-                if r+i <= 7:
-                    if self.board[r+i][c][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r+i, c), self.board))
-                    if self.board[r+i][c][0] == 'w':
-                        break
-                    i += 1
-                else:
-                    break
-            i = 1
-            while True:
-                if r-i >= 0:
-                    if self.board[r-i][c][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r-i, c), self.board))
-                    if self.board[r-i][c][0] == 'w':
-                        break
-                    i += 1
-                else:
-                    break
-            # move through columns
-            i = 1
-            while True:
-                if c+i <= 7:
-                    if self.board[r][c+i][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r, c+i), self.board))
-                    if self.board[r][c+i][0] == 'w':
-                        break
-                    i += 1
-                else:
-                    break
-            i = 1
-            while True:
-                if c-i >= 0:
-                    if self.board[r][c-i][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r, c-i), self.board))
-                    if self.board[r][c-i][0] == 'w':
-                        break
-                    i += 1
-                else:
+                else:  # off the board
                     break
 
     """
