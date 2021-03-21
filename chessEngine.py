@@ -114,7 +114,7 @@ class GameState():
         enemyColor = 'b' if self.whiteToMove else 'w'
 
         for d in directions:  # iterate through directions
-            for i in range(1, 8):  # add to row or column from 1 to 7
+            for i in range(1, 8):  # can move maximum 7 blocks
                 endRow = r+d[0]*i  # change rows
                 endCol = c+d[1]*i  # change columns
 
@@ -203,118 +203,27 @@ class GameState():
     """
 
     def getBishopMoves(self, r, c, moves):
-        if self.whiteToMove:  # white to move
-            i = 1
-            j = 1
-            while True:
-                if r+i <= 7 and c+j <= 7:
-                    if self.board[r+i][c+j][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r+i, c+j), self.board))
-                    if self.board[r+i][c+j][0] == 'b':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
+        directions = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # upleft upright downleft downright
+        # another way of writing an if statement
+        enemyColor = 'b' if self.whiteToMove else 'w'
 
-            i = 1
-            j = 1
-            while True:
-                if r+i <= 7 and c-j >= 0:
-                    if self.board[r+i][c-j][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r+i, c-j), self.board))
-                    if self.board[r+i][c-j][0] == 'b':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
+        for d in directions:  # iterate through directions
+            for i in range(1, 8):  # can move maximum of 7 squares
+                endRow = r+d[0]*i  # change rows
+                endCol = c+d[1]*i  # change columns
 
-            i = 1
-            j = 1
-            while True:
-                if r-i >= 0 and c+j <= 7:
-                    if self.board[r-i][c+j][0] == 'w':
+                if 0 <= endRow < 8 and 0 <= endCol < 8:  # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--":  # empty space valid
+                        moves.append(
+                            Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor:  # enemy piece valid
+                        moves.append(
+                            Move((r, c), (endRow, endCol), self.board))
                         break
-                    moves.append(Move((r, c), (r-i, c+j), self.board))
-                    if self.board[r-i][c+j][0] == 'b':
+                    else:  # not an enemy piece
                         break
-                    i += 1
-                    j += 1
-                else:
-                    break
-
-            i = 1
-            j = 1
-            while True:
-                if r-i >= 0 and c-j >= 0:
-                    if self.board[r-i][c-j][0] == 'w':
-                        break
-                    moves.append(Move((r, c), (r-i, c-j), self.board))
-                    if self.board[r-i][c-j][0] == 'b':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
-
-        else:  # black to move
-            i = 1
-            j = 1
-            while True:
-                if r+i <= 7 and c+j <= 7:
-                    if self.board[r+i][c+j][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r+i, c+j), self.board))
-                    if self.board[r+i][c+j][0] == 'w':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
-
-            i = 1
-            j = 1
-            while True:
-                if r+i <= 7 and c-j >= 0:
-                    if self.board[r+i][c-j][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r+i, c-j), self.board))
-                    if self.board[r+i][c-j][0] == 'w':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
-
-            i = 1
-            j = 1
-            while True:
-                if r-i >= 0 and c+j <= 7:
-                    if self.board[r-i][c+j][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r-i, c+j), self.board))
-                    if self.board[r-i][c+j][0] == 'w':
-                        break
-                    i += 1
-                    j += 1
-                else:
-                    break
-
-            i = 1
-            j = 1
-            while True:
-                if r-i >= 0 and c-j >= 0:
-                    if self.board[r-i][c-j][0] == 'b':
-                        break
-                    moves.append(Move((r, c), (r-i, c-j), self.board))
-                    if self.board[r-i][c-j][0] == 'w':
-                        break
-                    i += 1
-                    j += 1
-                else:
+                else:  # off the board
                     break
 
     """
