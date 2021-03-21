@@ -5,7 +5,7 @@ import pygame as p
 import chessEngine
 
 
-WIDTH = HEIGHT = 512
+WIDTH = HEIGHT = 768
 DIMENSION = 8  # chess board dimension 8X8
 SQ_SIZE = HEIGHT//DIMENSION  # square size
 MAX_FPS = 15  # for animation
@@ -27,7 +27,7 @@ def loadImages():
 
 
 """
-Main driver from our code 
+Main driver from our code
 """
 
 
