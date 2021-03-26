@@ -43,6 +43,10 @@ class GameState():
         if move.pieceMoved == 'bK':
             self.blackKingLocation = (move.endRow, move.endCol)
 
+        # pawn promotion
+        if move.isPawnPromotion:
+            self.board[move.endRow][move.endCol] = move.pieceMoved[0]+'Q'
+
     """
     Undo the last move made
     """
@@ -86,7 +90,7 @@ class GameState():
         else:  # update to original if we undo move
             self.checkMate = False
             self.staleMate = False
-            
+
         return moves
 
     """
@@ -283,6 +287,9 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.isPawnPromotion = False
+        if (self.pieceMoved == 'wp' and self.endRow == 0) or (self.pieceMoved == 'bp' and self.endRow == 7):
+            self.isPawnPromotion = True
         self.moveID = self.startRow * 1000 + self.startCol * \
             100 + self.endRow * 10 + self.endCol
         # print(self.moveID)
