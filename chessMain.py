@@ -3,6 +3,7 @@ and displaying the current game state. """
 
 import pygame as p
 import chessEngine
+import moveAI
 
 
 WIDTH = HEIGHT = 768
@@ -51,13 +52,18 @@ def main():
     playerClicks = []
     gameOver = False
 
+    playerOne = False  # if a human is playing white then it will be true,if AI then false
+    playerTwo = False  # same as above but for black
+
     while run:
+        humanTurn = (gs.whiteToMove and playerOne) or (
+            not gs.whiteToMove and playerTwo)
         for e in p.event.get():
             if e.type == p.QUIT:
                 run = False
             # mouse handlers
             elif e.type == p.MOUSEBUTTONDOWN:
-                if not gameOver:
+                if not gameOver and humanTurn:
                     location = p.mouse.get_pos()  # (x,y) location of the mouse
                     col = location[0]//SQ_SIZE
                     row = location[1]//SQ_SIZE
@@ -96,6 +102,13 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
+
+        # AI move
+        if not gameOver and not humanTurn:
+            AIMove = moveAI.findRandomMove(validMoves)
+            gs.makeMove(AIMove)
+            moveMade = True
+            animate = True
 
         if moveMade:
             if animate:
